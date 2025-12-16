@@ -6,6 +6,7 @@ use crossterm::event::KeyCode;
 use ratatui::backend::CrosstermBackend;
 use ratatui::layout::Rect;
 use ratatui::{Terminal, TerminalOptions, Viewport};
+use russh::server::Handle;
 use russh::{Channel, ChannelId, Pty};
 use russh::{MethodKind, MethodSet, server::*};
 use tokio::sync::Mutex;
@@ -18,7 +19,7 @@ type SshTerminal = Terminal<CrosstermBackend<TerminalHandle>>;
 
 #[derive(Clone)]
 pub struct AppServer {
-    clients: Arc<Mutex<HashMap<usize, (SshTerminal, App)>>>,
+    clients: Arc<Mutex<HashMap<usize, (SshTerminal, App, std::time::Instant, Handle, ChannelId)>>>,
     id: usize,
 }
 
@@ -32,7 +33,7 @@ impl AppServer {
 
     fn load_host_keys() -> Result<russh::keys::PrivateKey, anyhow::Error> {
         let key_path = Path::new("authorized_keys/ssh_host_ed25519_key");
-        
+
         if !key_path.exists() {
             return Err(anyhow::anyhow!(
                 "Host key not found at {}. Please generate host keys first.",
@@ -53,7 +54,7 @@ impl AppServer {
             loop {
                 tokio::time::sleep(tokio::time::Duration::from_millis(1000 / 30)).await;
 
-                for (_, (terminal, app)) in clients.lock().await.iter_mut() {
+                for (_, (terminal, app, _, _, _)) in clients.lock().await.iter_mut() {
                     app.handle_tick(tick);
 
                     let _ = terminal.draw(|f| {
@@ -64,16 +65,40 @@ impl AppServer {
             }
         });
 
+        let clients_timeout = self.clients.clone();
+        tokio::spawn(async move {
+            loop {
+                tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+                let mut to_remove = Vec::new();
+                {
+                    let clients_lock = clients_timeout.lock().await;
+                    for (&id, (_, _, last_activity, handle, channel_id)) in clients_lock.iter() {
+                        if last_activity.elapsed() > std::time::Duration::from_secs(300) {
+                            to_remove.push((id, handle.clone(), *channel_id));
+                        }
+                    }
+                }
+                for (id, handle, channel_id) in to_remove {
+                    let reset_sequence = b"\x1b[0m\x1b[2J\x1b[H\x1b[r\x1b[?25h";
+                    let _ = handle
+                        .data(channel_id, reset_sequence.as_ref().into())
+                        .await;
+                    let _ = handle.close(channel_id).await;
+                    clients_timeout.lock().await.remove(&id);
+                }
+            }
+        });
+
         let mut methods = MethodSet::empty();
         methods.push(MethodKind::None);
 
         println!("Starting SSH server on port 22...");
-        
+
         let host_key = Self::load_host_keys()
             .map_err(|e| anyhow::anyhow!("Failed to load host keys: {}", e))?;
-        
+
         let config = Config {
-            inactivity_timeout: Some(std::time::Duration::from_secs(3600)),
+            inactivity_timeout: None,
             auth_rejection_time: std::time::Duration::from_secs(3),
             auth_rejection_time_initial: Some(std::time::Duration::from_secs(0)),
             methods,
@@ -130,10 +155,11 @@ impl Handler for AppServer {
         let (sender, mut receiver) = unbounded_channel::<Vec<u8>>();
         let channel_id = channel.id();
         let handle = session.handle();
+        let handle_clone = handle.clone();
 
         tokio::spawn(async move {
             while let Some(data) = receiver.recv().await {
-                let result = handle.data(channel_id, data.into()).await;
+                let result = handle_clone.data(channel_id, data.into()).await;
                 if result.is_err() {
                     eprintln!("Failed to send data: {result:?}");
                     break;
@@ -152,7 +178,10 @@ impl Handler for AppServer {
         let app = App::new();
 
         let mut clients = self.clients.lock().await;
-        clients.insert(self.id, (terminal, app));
+        clients.insert(
+            self.id,
+            (terminal, app, std::time::Instant::now(), handle, channel_id),
+        );
 
         Ok(true)
     }
@@ -169,7 +198,8 @@ impl Handler for AppServer {
     ) -> Result<(), Self::Error> {
         if let Some(key_code) = Self::map_key_event(data) {
             let mut clients = self.clients.lock().await;
-            if let Some((_, app)) = clients.get_mut(&self.id) {
+            if let Some((_, app, last_activity, _, _)) = clients.get_mut(&self.id) {
+                *last_activity = std::time::Instant::now();
                 let handle_result = app.handle_key_event(key_code);
                 if handle_result.is_err() {
                     // Send terminal reset sequence directly through SSH session
@@ -202,7 +232,7 @@ impl Handler for AppServer {
         };
 
         let mut clients = self.clients.lock().await;
-        if let Some((terminal, _)) = clients.get_mut(&self.id) {
+        if let Some((terminal, _, _, _, _)) = clients.get_mut(&self.id) {
             let _ = terminal.resize(rect);
         }
 
@@ -228,7 +258,7 @@ impl Handler for AppServer {
         };
 
         let mut clients = self.clients.lock().await;
-        if let Some((terminal, _)) = clients.get_mut(&self.id) {
+        if let Some((terminal, _, _, _, _)) = clients.get_mut(&self.id) {
             let _ = terminal.resize(rect);
         }
 
