@@ -1,4 +1,4 @@
-/target
+*/target
 .DS_Store
-authorized_keys
-*.log
+ssh/authorized_keys
+*/.DS_Store
