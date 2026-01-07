@@ -1,5 +1,6 @@
 # On Advice
-_Searching for signal._
+
+_Searching for signal._  
 I'm just gonna keep this one short and simple.
 
 Advice can be extremely powerful but there is A LOT of it out there and some of it may not even be applicable to you! So, here are some guidelines.
