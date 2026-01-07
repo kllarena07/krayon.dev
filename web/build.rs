@@ -6,6 +6,8 @@ use std::path::Path;
 #[derive(Serialize, Deserialize)]
 struct Post {
     filename: String,
+    date: String,
+    size: u64,
 }
 
 fn markdown_to_html(markdown: &str) -> String {
@@ -51,8 +53,19 @@ fn main() {
                 fs::write(&output_path, html).expect("Failed to write HTML file");
                 println!("cargo:warning=Generated: {}", output_path);
 
+                let metadata = fs::metadata(&output_path).expect("Failed to get metadata");
+                let size = metadata.len();
+
+                // Use markdown file's modified time for date
+                let md_metadata = fs::metadata(&path).expect("Failed to get markdown metadata");
+                let modified = md_metadata.modified().expect("Failed to get modified time");
+                let datetime: chrono::DateTime<chrono::Utc> = modified.into();
+                let date = datetime.format("%d-%b-%Y %H:%M").to_string();
+
                 posts.push(Post {
                     filename: format!("{}.html", sanitized),
+                    date,
+                    size,
                 });
             }
         }

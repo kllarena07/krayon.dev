@@ -5,6 +5,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize)]
 struct Post {
     filename: String,
+    date: String,
+    size: u64,
 }
 
 #[derive(RustEmbed)]
@@ -38,10 +40,16 @@ async fn blog_index() -> Html<String> {
     let posts: Vec<Post> = serde_json::from_slice(&posts_json.data).unwrap();
 
     let mut links = String::new();
-    for post in posts {
+    for post in &posts {
+        let link = format!("<a href=\"/blog/{}\">{}</a>", post.filename, post.filename);
         links.push_str(&format!(
-            "\n<a href=\"/blog/{}\">{}</a>",
-            post.filename, post.filename
+            r#"<tr>
+                <td style="width: 398px;">{}</td>
+                <td style="width: 200px;">{}</td>
+                <td style="width: 8px;">{}</td>
+            </tr>
+"#,
+            link, post.date, post.size
         ));
     }
 
