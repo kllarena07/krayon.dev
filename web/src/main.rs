@@ -26,7 +26,12 @@ async fn index() -> Html<String> {
 async fn blog_file(Path(filename): Path<String>) -> (StatusCode, Html<String>) {
     if let Some(content_file) = BlogFiles::get(&filename) {
         let content = String::from_utf8(content_file.data.into_owned()).unwrap();
-        (StatusCode::OK, Html(content))
+        let custom_html = format!(
+            r#"<h1>Index of /blog/{}</h1><a href="/blog">../</a><hr>"#,
+            filename
+        );
+        let full_content = format!("{}{}<hr>", custom_html, content);
+        (StatusCode::OK, Html(full_content))
     } else {
         not_found().await
     }
