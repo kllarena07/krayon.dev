@@ -1,11 +1,6 @@
 # On Advice
-<<<<<<< HEAD:web/markdown/on advice.md
-
-_Searching for signal._  
-=======
 _Searching for signal._
 
->>>>>>> 37ca254d24e8a5809de1703ab5fa6b81df6286d7:web/markdown/letters to my younger self/on advice.md
 I'm just gonna keep this one short and simple.
 
 Advice can be extremely powerful but there is A LOT of it out there and some of it may not even be applicable to you! So, here are some guidelines.
