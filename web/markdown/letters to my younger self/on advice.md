@@ -13,5 +13,5 @@ That advice that you have received is **shit** (this is nuanced). Either ask for
 
 That’s all.
 
-_Written with ❤️ by Krayon_
-Follow me: x.com/krayon
+_Written with ❤️ by Krayon_  
+Follow me: [x.com/krayon](https://x.com/krayondev)
