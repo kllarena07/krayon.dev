@@ -2,3 +2,4 @@
 .DS_Store
 ssh/authorized_keys
 */.DS_Store
+web/blog
