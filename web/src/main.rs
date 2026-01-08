@@ -35,7 +35,6 @@ async fn index() -> Response {
 }
 
 async fn blog_file(Path(filename): Path<String>) -> Response {
-    println!("TEST1");
     if let Some(content_file) = BlogFiles::get(&filename) {
         println!("Found: {}", filename);
         if filename.ends_with(".html") {
@@ -51,7 +50,6 @@ async fn blog_file(Path(filename): Path<String>) -> Response {
                 .body(Body::from(full_content))
                 .unwrap()
         } else {
-            println!("TEST");
             let data = content_file.data.into_owned();
             let content_type = mime_guess::from_path(&filename)
                 .first_or_octet_stream()
@@ -63,7 +61,6 @@ async fn blog_file(Path(filename): Path<String>) -> Response {
                 .unwrap()
         }
     } else {
-        println!("BURH");
         not_found().await
     }
 }
