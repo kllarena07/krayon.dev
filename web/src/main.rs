@@ -74,9 +74,9 @@ async fn blog_index() -> Response {
     let template_file = StaticFiles::get("blog.html").unwrap();
     let template = String::from_utf8(template_file.data.into_owned()).unwrap();
 
-    let posts_json = BlogFiles::get("posts.json");
-    let posts: Vec<Post> = if let Some(pj) = posts_json {
-        serde_json::from_slice(&pj.data).unwrap_or_default()
+    let posts_yaml = BlogFiles::get("posts.yml");
+    let posts: Vec<Post> = if let Some(py) = posts_yaml {
+        serde_yaml::from_slice(&py.data).unwrap_or_default()
     } else {
         Vec::new()
     };

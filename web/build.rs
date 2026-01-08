@@ -1,4 +1,4 @@
-use pulldown_cmark::{Parser, html};
+use pulldown_cmark::{html, Parser};
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -164,7 +164,7 @@ fn main() {
         panic!("Failed to generate blog/index.html. Ensure posts/index/ and index.md exist.");
     }
 
-    // Write the posts to a JSON file
-    let json = serde_json::to_string(&posts).expect("Failed to serialize posts");
-    fs::write("blog/posts.json", json).expect("Failed to write posts.json");
+    // Write the posts to a YAML file
+    let yaml = serde_yaml::to_string(&posts).expect("Failed to serialize posts");
+    fs::write("blog/posts.yml", yaml).expect("Failed to write posts.yml");
 }
