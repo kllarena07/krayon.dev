@@ -26,11 +26,11 @@ async fn index() -> Html<String> {
 async fn blog_file(Path(filename): Path<String>) -> (StatusCode, Html<String>) {
     if let Some(content_file) = BlogFiles::get(&filename) {
         let content = String::from_utf8(content_file.data.into_owned()).unwrap();
-        let custom_html = format!(
-            r#"<h1>Index of /blog/{}</h1><a href="/blog">../</a><hr>"#,
-            filename
-        );
-        let full_content = format!("{}{}<hr>", custom_html, content);
+        let template = StaticFiles::get("blog_file.html").unwrap();
+        let template_str = String::from_utf8(template.data.into_owned()).unwrap();
+        let full_content = template_str
+            .replace("{{filename}}", &filename)
+            .replace("{{content}}", &content);
         (StatusCode::OK, Html(full_content))
     } else {
         not_found().await
@@ -44,18 +44,16 @@ async fn blog_index() -> Html<String> {
     let posts_json = BlogFiles::get("posts.json").unwrap();
     let posts: Vec<Post> = serde_json::from_slice(&posts_json.data).unwrap();
 
+    let row_template = StaticFiles::get("blog_row.html").unwrap();
+    let row_template_str = String::from_utf8(row_template.data.into_owned()).unwrap();
+
     let mut links = String::new();
     for post in &posts {
-        let link = format!("<a href=\"/blog/{}\">{}</a>", post.filename, post.filename);
-        links.push_str(&format!(
-            r#"<tr>
-                <td style="width: 398px;">{}</td>
-                <td style="width: 200px;">{}</td>
-                <td style="width: 8px;">{}</td>
-            </tr>
-"#,
-            link, post.date, post.size
-        ));
+        let row = row_template_str
+            .replace("{{filename}}", &post.filename)
+            .replace("{{date}}", &post.date)
+            .replace("{{size}}", &post.size.to_string());
+        links.push_str(&row);
     }
 
     let index_html = template.replace("{{content}}", &links);
