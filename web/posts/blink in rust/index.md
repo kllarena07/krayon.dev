@@ -10,9 +10,11 @@ So, that brings us to this article in my blog, which is writing embedded Rust.
 > Why Rust you might ask? I’ve done some programming in C++ and I don’t like the ergonomics of it. I specifically chose Rust because it feels better and more aligned with how I want to work just like how you choose which web browser you want to work with.
 
 **The Major Takeaway of What I Learned:**
+
 You control the state of different board peripherals by driving the state of different pins on the microcontroller and modify the contents of the microcontroller registers.
 
 For example, see the schematic of the Microbit V2 MCU below:
+
 ![Schematic of the Microbit V2 Target MCU](target_mcu.png)
 
 If you take a look at their [online schematics](https://github.com/microbit-foundation/microbit-v2-hardware/blob/main/V2.00/MicroBit_V2.0.0_S_schematic.PDF), you’ll see that you control the peripherals of the board by driving the state of the pins on the MCU (which is a [nRF52833](https://docs.nordicsemi.com/bundle/ps_nrf52833/page/keyfeatures_html5.html), I was using v1.6).
