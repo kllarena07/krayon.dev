@@ -25,12 +25,17 @@ struct StaticFiles;
 struct BlogFiles;
 
 async fn index() -> Response {
-    let file = StaticFiles::get("index.html").unwrap();
-    let content = String::from_utf8(file.data.into_owned()).unwrap();
+    let content_file = BlogFiles::get("index.html").unwrap();
+    let content = String::from_utf8(content_file.data.into_owned()).unwrap();
+    let template_file = StaticFiles::get("blog_file.html").unwrap();
+    let template_str = String::from_utf8(template_file.data.into_owned()).unwrap();
+    let full_content = template_str
+        .replace("{{filename}}", "deploying-a-portfolio-over-ssh.html")
+        .replace("{{content}}", &content);
     Response::builder()
         .status(StatusCode::OK)
         .header(header::CONTENT_TYPE, "text/html")
-        .body(Body::from(content))
+        .body(Body::from(full_content))
         .unwrap()
 }
 

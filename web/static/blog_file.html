@@ -2,10 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{filename}}</title>
+    <title>krayon.dev</title>
+    <style>
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      #location {
+        margin-top: 0;
+      }
+    </style>
 </head>
 <body>
-<h1>Index of /blog/{{filename}}</h1>
+<h1 id="location">Index of /blog/{{filename}}</h1>
 <hr>
 <a href="/blog">Back to blog</a>
 {{content}}

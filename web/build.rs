@@ -143,13 +143,20 @@ fn main() {
                 let datetime: chrono::DateTime<chrono::Utc> = modified.into();
                 let date = datetime.format("%d-%b-%Y %H:%M").to_string();
 
-                posts.push(Post {
-                    filename: format!("{}.html", sanitized),
-                    date,
-                    size,
-                });
+                if dirname != "index" {
+                    posts.push(Post {
+                        filename: format!("{}.html", sanitized),
+                        date,
+                        size,
+                    });
+                }
             }
         }
+    }
+
+    // Ensure index.html was generated
+    if !std::path::Path::new("blog/index.html").exists() {
+        panic!("Failed to generate blog/index.html. Ensure posts/index/ and index.md exist.");
     }
 
     // Write the posts to a JSON file
