@@ -71,7 +71,11 @@ fn copy_assets(post_dir: &Path, output_base: &Path) {
 }
 
 fn update_asset_paths(html: &str, dirname: &str) -> String {
-    html.replace("src=\"", &format!("src=\"./{}/assets/", dirname))
+    if dirname == "index" {
+        html.replace("src=\"", &format!("src=\"./blog/{}/assets/", dirname))
+    } else {
+        html.replace("src=\"", &format!("src=\"./{}/assets/", dirname))
+    }
 }
 
 fn inject_video_fallback(html: &str) -> String {
