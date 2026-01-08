@@ -1,4 +1,4 @@
-use pulldown_cmark::{html, Parser};
+use pulldown_cmark::{Parser, html};
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -56,17 +56,15 @@ fn copy_assets(post_dir: &Path, output_base: &Path) {
     fs::create_dir_all(&assets_dir).expect("Failed to create assets directory");
 
     if let Ok(entries) = fs::read_dir(post_dir) {
-        for entry in entries {
-            if let Ok(entry) = entry {
-                let path = entry.path();
-                if path.is_file()
-                    && (is_image_file(&path) || is_video_file(&path))
-                    && path.file_name() != Some(std::ffi::OsStr::new("index.md"))
-                {
-                    let filename = path.file_name().unwrap();
-                    let dest = assets_dir.join(filename);
-                    fs::copy(&path, &dest).expect("Failed to copy asset");
-                }
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if path.is_file()
+                && (is_image_file(&path) || is_video_file(&path))
+                && path.file_name() != Some(std::ffi::OsStr::new("index.md"))
+            {
+                let filename = path.file_name().unwrap();
+                let dest = assets_dir.join(filename);
+                fs::copy(&path, &dest).expect("Failed to copy asset");
             }
         }
     }
@@ -106,7 +104,10 @@ fn main() {
                     .chars()
                     .all(|c| c.is_alphabetic() || c.is_numeric() || c == ' ')
                 {
-                    panic!("Directory name '{}' contains invalid characters. Only letters (a-z, A-Z), numbers (0-9), and spaces are allowed.", dirname);
+                    panic!(
+                        "Directory name '{}' contains invalid characters. Only letters (a-z, A-Z), numbers (0-9), and spaces are allowed.",
+                        dirname
+                    );
                 }
 
                 // Check for index.md
@@ -121,7 +122,7 @@ fn main() {
                 let sanitized = sanitize_filename(dirname);
 
                 // Copy assets
-                copy_assets(&dir_path, &Path::new(&format!("blog/{}", sanitized)));
+                copy_assets(&dir_path, Path::new(&format!("blog/{}", sanitized)));
 
                 // Update asset paths
                 html = update_asset_paths(&html, &sanitized);
