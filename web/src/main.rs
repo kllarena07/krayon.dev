@@ -57,6 +57,7 @@ async fn blog_file(Path(filename): Path<String>) -> Response {
             Response::builder()
                 .status(StatusCode::OK)
                 .header(header::CONTENT_TYPE, content_type)
+                .header("Cache-Control", "public, max-age=31536000")
                 .body(axum::body::Body::from(data))
                 .unwrap()
         }

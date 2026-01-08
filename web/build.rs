@@ -1,4 +1,5 @@
 use pulldown_cmark::{html, Parser};
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
@@ -42,6 +43,14 @@ fn is_image_file(path: &Path) -> bool {
     }
 }
 
+fn is_video_file(path: &Path) -> bool {
+    if let Some(ext) = path.extension() {
+        matches!(ext.to_str().unwrap_or(""), "mp4" | "mov")
+    } else {
+        false
+    }
+}
+
 fn copy_assets(post_dir: &Path, output_base: &Path) {
     let assets_dir = output_base.join("assets");
     fs::create_dir_all(&assets_dir).expect("Failed to create assets directory");
@@ -51,7 +60,7 @@ fn copy_assets(post_dir: &Path, output_base: &Path) {
             if let Ok(entry) = entry {
                 let path = entry.path();
                 if path.is_file()
-                    && is_image_file(&path)
+                    && (is_image_file(&path) || is_video_file(&path))
                     && path.file_name() != Some(std::ffi::OsStr::new("index.md"))
                 {
                     let filename = path.file_name().unwrap();
@@ -63,8 +72,17 @@ fn copy_assets(post_dir: &Path, output_base: &Path) {
     }
 }
 
-fn update_image_paths(html: &str, dirname: &str) -> String {
+fn update_asset_paths(html: &str, dirname: &str) -> String {
     html.replace("src=\"", &format!("src=\"./{}/assets/", dirname))
+}
+
+fn inject_video_fallback(html: &str) -> String {
+    let re = Regex::new(r#"<video([^>]*)></video>"#).unwrap();
+    re.replace_all(
+        html,
+        r#"<video$1><p>Your browser does not support the video tag.</p></video>"#,
+    )
+    .to_string()
 }
 
 fn main() {
@@ -102,8 +120,9 @@ fn main() {
                 // Copy assets
                 copy_assets(&dir_path, &Path::new(&format!("blog/{}", sanitized)));
 
-                // Update image paths
-                html = update_image_paths(&html, &sanitized);
+                // Update asset paths
+                html = update_asset_paths(&html, &sanitized);
+                html = inject_video_fallback(&html);
 
                 let output_path = format!("blog/{}.html", sanitized);
                 fs::write(&output_path, html).expect("Failed to write HTML file");

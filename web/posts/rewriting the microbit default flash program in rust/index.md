@@ -269,8 +269,9 @@ Notice how there is drawing logic in the wind_up() and wind_down() function. Tha
 And that’s it!
 
 **Here’s the Program in Action:**
+
 <video width="640" height="360" controls>
-  <source src="./IMG_7392.mov" type="video/mp4">
+  <source src="IMG_7392.mov" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
