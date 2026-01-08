@@ -101,9 +101,12 @@ fn main() {
             if dir_path.is_dir() {
                 let dirname = dir_path.file_name().unwrap().to_str().unwrap();
 
-                // Validate dirname contains only letters and spaces
-                if !dirname.chars().all(|c| c.is_alphabetic() || c == ' ') {
-                    panic!("Directory name '{}' contains invalid characters. Only letters (a-z, A-Z) and spaces are allowed.", dirname);
+                // Validate dirname contains only letters, numbers, and spaces
+                if !dirname
+                    .chars()
+                    .all(|c| c.is_alphabetic() || c.is_numeric() || c == ' ')
+                {
+                    panic!("Directory name '{}' contains invalid characters. Only letters (a-z, A-Z), numbers (0-9), and spaces are allowed.", dirname);
                 }
 
                 // Check for index.md
