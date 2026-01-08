@@ -41,7 +41,6 @@ async fn index() -> Response {
 
 async fn blog_file(Path(filename): Path<String>) -> Response {
     if let Some(content_file) = BlogFiles::get(&filename) {
-        println!("Found: {}", filename);
         if filename.ends_with(".html") {
             let content = String::from_utf8(content_file.data.into_owned()).unwrap();
             let template = StaticFiles::get("blog_file.html").unwrap();
