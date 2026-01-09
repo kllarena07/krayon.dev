@@ -112,6 +112,26 @@ async fn not_found() -> Response {
         .unwrap()
 }
 
+async fn robots_txt() -> Response {
+    let content_file = StaticFiles::get("robots.txt").unwrap();
+    let content = String::from_utf8(content_file.data.into_owned()).unwrap();
+    Response::builder()
+        .status(StatusCode::OK)
+        .header(header::CONTENT_TYPE, "text/plain")
+        .body(Body::from(content))
+        .unwrap()
+}
+
+async fn llms_txt() -> Response {
+    let content_file = StaticFiles::get("llms.txt").unwrap();
+    let content = String::from_utf8(content_file.data.into_owned()).unwrap();
+    Response::builder()
+        .status(StatusCode::OK)
+        .header(header::CONTENT_TYPE, "text/plain")
+        .body(Body::from(content))
+        .unwrap()
+}
+
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     println!("Starting server on http://localhost:3000");
@@ -121,6 +141,8 @@ async fn main() -> std::io::Result<()> {
         .route("/blog", get(blog_index))
         .route("/blog/", get(blog_index))
         .route("/blog/{*filename}", get(blog_file))
+        .route("/robots.txt", get(robots_txt))
+        .route("/llms.txt", get(llms_txt))
         .fallback(not_found);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
