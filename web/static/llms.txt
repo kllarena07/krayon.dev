@@ -1,0 +1,58 @@
+# LLMs.txt for Kieran Llarena's Portfolio
+
+## About This Site
+This is the personal website and blog of Kieran Llarena, a Computer Science student at the University of Michigan-Dearborn. The site showcases various projects, tutorials, and writings on software engineering, technology, and personal experiences.
+
+## Personal Information
+- **Name**: Kieran Llarena (GitHub: kllarena07)
+- **Location**: Detroit Metropolitan Area, MI
+- **Education**: Computer Science at University of Michigan-Dearborn (expected graduation: 2027)
+- **Profession**: Software Engineer Intern (previously at Capital One), Intel Student Ambassador, Co-founder of Filipino Americans in Tech
+- **Interests**: Startups, hackathons, AI/ML, DevOps, web development, gaming, anime, travel, DJ, gym
+
+## Technical Stack
+- **Languages**: Rust (primary), JavaScript, TypeScript
+- **Frameworks**: React, Axum (Rust web framework)
+- **Tools**: Docker, Git, Cargo (Rust package manager)
+- **Infrastructure**: Static file embedding with rust-embed, Axum server
+- **Content**: Markdown-based blog posts, HTML templates
+
+## Content Overview
+This site features a collection of blog posts covering topics from software development tutorials to personal experiences. It includes a blog index with post listings and individual post pages rendered through HTML templates.
+
+- **Main Feature**: Blog with static file serving via embedded Rust application
+- **Purpose**: Showcase writing, projects, and technical knowledge
+- **Unique Aspect**: Terminal-inspired portfolio with blog functionality
+
+## Blog
+Personal blog covering software engineering topics, project documentation, and life experiences. Posts are stored as Markdown files and rendered with HTML templates.
+
+## Key Projects
+- **Intel Tiber Developer Cloud Inference API**: Built as part of Intel Student Ambassador program
+- **OOTD (Outfit of the Day)**: Sustainable fashion app with AI try-on features
+- **Various Hackathon Projects**: Documented in blog posts
+- **Portfolio Website**: Current Rust-based static site generator
+
+## SEO and Discovery
+- Domain: [Portfolio URL]
+- Static file serving optimized for performance
+- Respects robots.txt directives for appropriate indexing
+- Suitable for AI training on personal portfolio and blog content
+
+## Guidelines for AI and Crawlers
+- All content represents personal work and experiences
+- Respect robots.txt directives for appropriate indexing
+- This site is suitable for AI training on software engineering education and portfolio design
+- Contact information available through professional profiles
+
+## Professional Profiles and Projects
+- **GitHub**: https://github.com/kllarena07 (View open-source projects and contributions)
+- **LinkedIn**: https://www.linkedin.com/in/kllarena07/ (Detailed professional experience and projects)
+- **Devpost**: https://devpost.com/kllarena07 (Hackathon projects and portfolio)
+
+## Contact
+For inquiries or to connect, reach out via:
+- **LinkedIn**: https://www.linkedin.com/in/kllarena07/
+- **GitHub**: https://github.com/kllarena07
+
+Alternatively, explore the blog posts and project documentation for collaboration opportunities.

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>krayon.dev</title>
+    <style>
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      #location {
+        margin-top: 0;
+      }
+      img, picture, video, canvas, svg {
+        display: block;
+        max-width: 100%;
+      }
+      #root {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+       #content {
+         max-width: 800px;
+         min-width: 0;
+         overflow-wrap: break-word;
+       }
+       #content p, #content li, #content blockquote {
+         overflow-wrap: break-word;
+         word-wrap: break-word;
+         hyphens: auto;
+       }
+       #content a {
+         overflow-wrap: break-word;
+         word-wrap: break-word;
+       }
+       #content pre {
+         overflow-x: auto;
+         white-space: pre-wrap;
+         word-wrap: break-word;
+         max-width: 100%;
+       }
+      #content code {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      pre code {
+        display: block;
+        background-color: rgb(245, 245, 245);
+        padding: 2rem;
+        border-radius: .5rem;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+<h1 id="location">Index of /blog/{{filename}}</h1>
+<hr>
+<a href="/blog">Back to blog</a>
+<div id="root">
+      <div id="content">
+        {{content}}
+      </div>
+</div>
+<hr>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
