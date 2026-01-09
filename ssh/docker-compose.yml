@@ -2,6 +2,8 @@ services:
   portfolio-ssh:
     image: portfolio-ssh:latest
     deploy:
+      update_config:
+        order: start-first
       replicas: 5
       restart_policy:
         condition: on-failure
