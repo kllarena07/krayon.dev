@@ -14,13 +14,47 @@
         display: block;
         max-width: 100%;
       }
+      #root {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+       #content {
+         max-width: 700px;
+         min-width: 0;
+         overflow-wrap: break-word;
+       }
+       #content p, #content li, #content blockquote {
+         overflow-wrap: break-word;
+         word-wrap: break-word;
+         hyphens: auto;
+       }
+       #content a {
+         overflow-wrap: break-word;
+         word-wrap: break-word;
+       }
+       #content pre {
+         overflow-x: auto;
+         white-space: pre-wrap;
+         word-wrap: break-word;
+         max-width: 100%;
+       }
+       #content code {
+         white-space: pre-wrap;
+         word-wrap: break-word;
+       }
     </style>
 </head>
 <body>
 <h1 id="location">Index of /blog/{{filename}}</h1>
 <hr>
 <a href="/blog">Back to blog</a>
-{{content}}
+<div id="root">
+      <div id="content">
+        {{content}}
+      </div>
+</div>
 <hr>
 </body>
 </html>
