@@ -21,7 +21,7 @@
         align-items: center;
       }
        #content {
-         max-width: 700px;
+         max-width: 800px;
          min-width: 0;
          overflow-wrap: break-word;
        }
@@ -40,11 +40,19 @@
          word-wrap: break-word;
          max-width: 100%;
        }
-       #content code {
-         white-space: pre-wrap;
-         word-wrap: break-word;
-       }
+      #content code {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      pre code {
+        display: block;
+        background-color: rgb(245, 245, 245);
+        padding: 2rem;
+        border-radius: .5rem;
+      }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body>
 <h1 id="location">Index of /blog/{{filename}}</h1>
@@ -56,5 +64,6 @@
       </div>
 </div>
 <hr>
+<script>hljs.highlightAll();</script>
 </body>
 </html>
