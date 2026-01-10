@@ -4,37 +4,45 @@
 
 Inspired by [terminal.shop](https://www.terminal.shop/) and the brilliant minds at Terminal Products, Inc.
 
-This is the code repository for my portfolio, specifically the terminal version of it.
+This is the code repository for my portfolio, containing both the SSH terminal version and the web blog version.
 
 You can visit it at `ssh krayon.dev` (use in a modern terminal for the best experience).
 
-To view the website version, use HTTP/HTTPS instead of SSH...or see https://krayon.dev. View the code [here](https://github.com/kllarena07/portfolio-v2-website).
-
-If you would like to learn how repository works, you can read about it [here](https://decorous-forgery-74e.notion.site/Making-an-SSH-Personal-Website-2b4b898d9b9e80d9bb11e8a9e05aa4b3?pvs=74).
+If you would like to learn how deploying a portfolio to ssh works, you can read about it [here](https://krayon.dev/).
 
 ## 📂 General Portfolio Structure
 
 ```
-ssh_krayon.dev/
-├── hikari-dance/                    # Animation frames
-│   ├── frame_0.png -> frame_67.png
-│   └── frames_cache.bin             # Cached binary frame data
-├── src/
-│   ├── pages/                       # Portfolio pages
-│   │   ├── labels/                  # Tech labels
-│   │   ├── about.rs
-│   │   ├── experience.rs
-│   │   ├── leadership.rs
-│   │   ├── mod.rs
-│   │   ├── page.rs                  # Base page component
-│   │   ├── projects.rs
-│   │   └── style.rs                 # Styling utilities
-│   ├── server/                      # Server-side components
-│   │   ├── app_server.rs            # Main SSH server logic
-│   │   ├── mod.rs                   
-│   │   └── terminal_handle.rs       # Terminal handling logic
-│   ├── app.rs                       # Main app logic
-│   └── main.rs
+portfolio-v2/
+├── ssh/
+│   ├── hikari-dance/                # Animation frames
+│   │   ├── frame_0.png -> frame_67.png
+│   │   └── frames_cache.bin         # Cached binary frame data
+│   └── src/
+│       ├── pages/                   # Portfolio pages
+│       │   ├── labels/              # Tech labels
+│       │   ├── about.rs
+│       │   ├── experience.rs
+│       │   ├── leadership.rs
+│       │   ├── mod.rs
+│       │   ├── page.rs              # Base page component
+│       │   ├── projects.rs
+│       │   └── style.rs             # Styling utilities
+│       ├── server/                  # Server-side components
+│       │   ├── app_server.rs        # Main SSH server logic
+│       │   ├── mod.rs               
+│       │   └── terminal_handle.rs   # Terminal handling logic
+│       ├── app.rs                   # Main app logic
+│       └── main.rs
+├── web/
+│   ├── posts/                       # Blog content (Markdown + assets)
+│   ├── src/                         # Axum web server
+│   ├── static/                      # HTML templates
+│   ├── build.rs                     # Static site generator
+│   ├── Cargo.toml
+│   ├── Dockerfile
+│   └── docker-compose.yml
+├── README.md
 └── other utilities
 ```
 
