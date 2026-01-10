@@ -35,6 +35,7 @@ async fn index() -> Response {
     Response::builder()
         .status(StatusCode::OK)
         .header(header::CONTENT_TYPE, "text/html")
+        .header("Cache-Control", "public, max-age=3600")
         .body(Body::from(full_content))
         .unwrap()
 }
@@ -51,6 +52,7 @@ async fn blog_file(Path(filename): Path<String>) -> Response {
             Response::builder()
                 .status(StatusCode::OK)
                 .header(header::CONTENT_TYPE, "text/html")
+                .header("Cache-Control", "public, max-age=3600")
                 .body(Body::from(full_content))
                 .unwrap()
         } else {
@@ -98,6 +100,7 @@ async fn blog_index() -> Response {
     Response::builder()
         .status(StatusCode::OK)
         .header(header::CONTENT_TYPE, "text/html")
+        .header("Cache-Control", "public, max-age=3600")
         .body(Body::from(index_html))
         .unwrap()
 }
@@ -108,6 +111,7 @@ async fn not_found() -> Response {
     Response::builder()
         .status(StatusCode::NOT_FOUND)
         .header(header::CONTENT_TYPE, "text/html")
+        .header("Cache-Control", "public, max-age=3600")
         .body(Body::from(content))
         .unwrap()
 }
